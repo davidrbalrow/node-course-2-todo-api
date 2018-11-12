@@ -7,8 +7,13 @@ var {User} = require('./models/user')
 
 var app = express();
 
+// bodyParser is middleware to be used by express
+// bodyParser will take our json text and turn it into json Object (attached to req object)
+// return of json function is a function
+
 app.use(bodyParser.json());
 
+//express post route  2 args URl and callback function
 app.post('/todos',(req,res) => {
     var todo = new Todo({
       text: req.body.text
@@ -26,6 +31,8 @@ app.post('/todos',(req,res) => {
 app.listen(3000, () =>{
     console.log('Started on port 3000')
 });
+
+module.exports = {app};
 // var newTodo = new Todo({
 //   text: 'Cook dinner'
 // });
