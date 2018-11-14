@@ -7,6 +7,7 @@ var {User} = require('./models/user');
 const {ObjectID} = require('mongodb');
 
 var app = express();
+var port = process.env.PORT || 3000;
 
 // bodyParser is middleware to be used by express
 // bodyParser will take our json text and turn it into json Object (attached to req object)
@@ -37,8 +38,8 @@ app.get('/todos',(req,res) => {
 
 });
 
-app.listen(3000, () =>{
-    console.log('Started on port 3000')
+app.listen(port, () =>{
+    console.log(`Started on port ${port}`)
 });
 
 // GET /todos/
