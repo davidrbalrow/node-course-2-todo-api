@@ -10,7 +10,9 @@ _id: new ObjectID,
 text: 'First test todo'
 },{
 _id: new ObjectID,
-text: 'First test todo'
+text: 'Second test todo',
+completed: true,
+completedAt: 333
 }];
 
 beforeEach((done) => {
@@ -157,4 +159,54 @@ describe('DELETE /todos/:id', () => {
     .end(done)
   });
 
+});
+
+describe('PATCH /todos/:id', () => {
+  it('should update the todo',(done) =>{
+    var hexId = todos[0]._id.toHexString();
+    var patchData = {
+	     'completed': true,
+	      'text': "Updates from postman"
+      };
+      console.log(patchData);
+      console.log(patchData.text);
+    request(app)
+    .patch(`/todos/${hexId}`)
+    .send(patchData)
+    .expect(200)
+    .expect((res)=>{
+    //  console.log(res);
+    //  console.log(res.body.todo._id);
+    //  expect(res.body.todo._id).toBe(hexId);
+    //  console.log(res.body.todo.text);
+    //  console.log(patchData.text);
+      expect(res.body.todo.text).toBe(patchData.text);
+      expect(res.body.todo.completed).toBe(true);
+      expect(res.body.todo.completedAt).toBeA('number');
+
+  }).end(done)
+
+  });
+
+  it('should clear completedAt when todo is not completed', (done) =>{
+
+      var hexId = todos[1]._id.toHexString();
+      var patchData = {
+         'completed': false,
+          'text': "Updates from test2"
+        };
+        console.log(patchData);
+        console.log(patchData.text);
+      request(app)
+      .patch(`/todos/${hexId}`)
+      .send(patchData)
+      .expect(200)
+      .expect((res)=>{
+
+        expect(res.body.todo.text).toBe(patchData.text);
+        expect(res.body.todo.completed).toBe(false);
+        expect(res.body.todo.completedAt).toBe(null);
+
+    }).end(done)
+  });
 });
